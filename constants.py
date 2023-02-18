@@ -1,5 +1,5 @@
-PWD_HASH_SALT =b"secret here"
+PWD_HASH_SALT =b"put_secret_here"
 PWD_HASH_ITERATIONS = 100_000
 
-JWT_SECRET = "s3cR$eT"
+JWT_SECRET = "s3cR$eTes"
 JWT_ALGORITHM = "HS256"

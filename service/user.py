@@ -1,12 +1,9 @@
-import base64
 import hashlib
+import base64
 import hmac
 
-from flask import request
-from flask_restx import abort
-
-from constants import PWD_HASH_SALT, PWD_HASH_ITERATIONS
 from dao.user import UserDAO
+from constants import PWD_HASH_SALT, PWD_HASH_ITERATIONS
 
 
 class UserService:
@@ -19,38 +16,37 @@ class UserService:
     def get_all(self):
         return self.dao.get_all()
 
-    def gey_by_username(self, username):
+    def get_by_username(self, username):
         return self.dao.get_by_username(username)
 
+    def get_user_by_email(self, email):
+        return self.dao.get_user_by_email(email)
+
     def create(self, user_d):
-        user_d["password"] = self.make_user_password_hash(user_d.get("password"))
+        user_d["password"] = self.generate_password_hash(user_d.get("password"))
         return self.dao.create(user_d)
 
     def update(self, user_d):
-        user_d["password"] = self.make_user_password_hash(user_d.get("password"))
         self.dao.update(user_d)
         return self.dao
 
-    def generate_hash_password(self, password):
-        hashed_pass = hashlib.pbkdf2_hmac(
+    def delete(self, rid):
+        self.dao.delete(rid)
+
+    def generate_password_hash(self, password):
+        hashed_password = hashlib.pbkdf2_hmac(
             'sha256',
             password.encode('utf-8'),
             PWD_HASH_SALT,
             PWD_HASH_ITERATIONS
         )
 
-        return base64.b64encode(hashed_pass)
+        return base64.b64encode(hashed_password)
 
-    def compare_hash_password(self, hash_password, other_password):
-        return hmac.compare_digest(
-            base64.b64decode(hash_password),
-            hashlib.pbkdf2_hmac(
-                'sha256',
-                other_password.encode('utf-8'),
-                PWD_HASH_SALT,
-                PWD_HASH_ITERATIONS
-            )
-        )
-
-    def delete(self, uid):
-        self.dao.delete(uid)
+    def compare_passwords(self, password_hashed, password) -> bool:
+        return base64.b64encode(hashlib.pbkdf2_hmac(
+            'sha256',
+            password.encode('utf-8'),
+            PWD_HASH_SALT,
+            PWD_HASH_ITERATIONS
+        )) == password_hashed

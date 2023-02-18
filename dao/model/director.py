@@ -9,6 +9,7 @@ class Director(db.Model):
     name = db.Column(db.String(255))
 
 
+
 class DirectorSchema(Schema):
     id = fields.Int()
     name = fields.Str()

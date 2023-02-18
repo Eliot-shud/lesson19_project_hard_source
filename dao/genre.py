@@ -1,3 +1,4 @@
+from config import Config
 from dao.model.genre import Genre
 
 
@@ -9,7 +10,14 @@ class GenreDAO:
         return self.session.query(Genre).get(bid)
 
     def get_all(self):
-        return self.session.query(Genre).all()
+        page = filter.get('page')
+        if page is not None:
+            result = self.session.query(Genre).paginate(int(page), Config.ITEMS_PER_PAGE,
+                                                        max_per_page=Config.MAX_PAGE,
+                                                        error_out=False).items
+            return result
+        else:
+            return self.session.query(Genre).all()
 
     def create(self, genre_d):
         ent = Genre(**genre_d)
