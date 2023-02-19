@@ -1,5 +1,5 @@
-from config import Config
 from dao.model.movie import Movie
+from config import Config
 
 
 class MovieDAO:
@@ -13,24 +13,22 @@ class MovieDAO:
         status = filter.get('status')
         page = filter.get('page')
 
-        if "status" == "new" and page is not None:
-            result = self.session.query(Movie).order_by(Movie.year.desc()).\
-                paginate(int(page), Config.ITEMS_PER_PAGE, max_per_page=Config.MAX_PAGE,
-                         error_out=False).items
+        if status == 'new' and page is not None:
+            result = self.session.query(Movie).order_by(Movie.year.desc()).paginate(int(page), Config.ITEMS_PER_PAGE,
+                                                                                    max_per_page=Config.MAX_PAGE,
+                                                                                    error_out=False).items
             return result
 
-        elif status == "new":
+        elif status == 'new':
             result = self.session.query(Movie).order_by(Movie.year.desc()).all()
             return result
 
         elif page is not None:
-            result = self.session.query(Movie). \
-                paginate(int(page), Config.ITEMS_PER_PAGE, max_per_page=Config.MAX_PAGE,
-                         error_out=False).items
+            result = self.session.query(Movie).paginate(int(page), Config.ITEMS_PER_PAGE, max_per_page=Config.MAX_PAGE,
+                                                        error_out=False).items
             return result
 
         return self.session.query(Movie).all()
-
 
     def get_by_director_id(self, val):
         return self.session.query(Movie).filter(Movie.director_id == val).all()
@@ -64,3 +62,4 @@ class MovieDAO:
 
         self.session.add(movie)
         self.session.commit()
+

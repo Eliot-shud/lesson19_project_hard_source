@@ -7,3 +7,4 @@ class Config(object):
     MAX_PAGE = 100
     JSON_AS_ASCII = False
 
+
