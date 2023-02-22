@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import request
 from flask_restx import Resource, Namespace
 
 from dao.model.genre import GenreSchema
@@ -11,7 +11,7 @@ genre_ns = Namespace('genres')
 class GenresView(Resource):
 
     def get(self):
-        rs = genre_service.get_all()
+        rs = genre_service.get_all(filter)
         res = GenreSchema(many=True).dump(rs)
         return res, 200
 
