@@ -10,6 +10,7 @@ movie_ns = Namespace('movies')
 
 @movie_ns.route('/')
 class MoviesView(Resource):
+
     @auth_required
     def get(self):
         status = request.args.get("status")

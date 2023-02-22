@@ -19,6 +19,7 @@ class UserService:
     def get_by_username(self, username):
         return self.dao.get_by_username(username)
 
+
     def get_user_by_email(self, email):
         return self.dao.get_user_by_email(email)
 

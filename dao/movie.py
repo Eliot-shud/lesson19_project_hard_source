@@ -10,16 +10,16 @@ class MovieDAO:
         return self.session.query(Movie).get(bid)
 
     def get_all(self, filter):
-        status = filter.get('status')
-        page = filter.get('page')
+        status = filter.get("status")
+        page = filter.get("page")
 
-        if status == 'new' and page is not None:
+        if status == "new" and page is not None:
             result = self.session.query(Movie).order_by(Movie.year.desc()).paginate(int(page), Config.ITEMS_PER_PAGE,
                                                                                     max_per_page=Config.MAX_PAGE,
                                                                                     error_out=False).items
             return result
 
-        elif status == 'new':
+        elif status == "new":
             result = self.session.query(Movie).order_by(Movie.year.desc()).all()
             return result
 

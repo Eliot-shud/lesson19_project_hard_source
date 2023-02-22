@@ -25,18 +25,23 @@ class AuthService:
             "email": user.email,
         }
 
-        #access_token------------------------------------------------------
+        # access_token------------------------------------------------------
+
         min30 = datetime.datetime.utcnow() + datetime.timedelta(minutes=30)
         data['exp'] = calendar.timegm(min30.timetuple())
         access_token = jwt.encode(data, JWT_SECRET, algorithm=JWT_ALGORITHM)
 
 
         # refresh_token---------------------------------------------------
+
         days130 = datetime.datetime.utcnow() + datetime.timedelta(days=130)
         data['exp'] = calendar.timegm(days130.timetuple())
         refresh_token = jwt.encode(data, JWT_SECRET, algorithm=JWT_ALGORITHM)
 
-        return {"access_token": access_token, "refresh_token": refresh_token}
+        return {
+            "access_token": access_token,
+            "refresh_token": refresh_token
+        }
 
     def approve_refresh_token(self, refresh_token):
         data = jwt.decode(jwt=refresh_token, key=JWT_SECRET, algorithms=[JWT_ALGORITHM])
@@ -55,7 +60,8 @@ class AuthService:
         for token in [access_token, refresh_token]:
             try:
                 jwt.decode(jwt=token, key=JWT_SECRET, algorithms=[JWT_ALGORITHM])
+
             except Exception as e:
-                return "Fail"
+                return False
 
         return True
