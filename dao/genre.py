@@ -9,7 +9,7 @@ class GenreDAO:
     def get_one(self, bid):
         return self.session.query(Genre).get(bid)
 
-    def get_all(self):
+    def get_all(self, filter):
         page = filter.get('page')
         if page is not None:
             result = self.session.query(Genre).paginate(int(page), Config.ITEMS_PER_PAGE,
